@@ -73,11 +73,17 @@ with open(r'input\token.txt', 'r') as token:
 	password = token.readline().replace('\n', '')
 
 bot = Bot()
-
-loop = asyncio.get_event_loop()
 try:
-	loop.run_until_complete(bot.start(email, password))
+	bot.loop.run_until_complete(bot.start(email, password))
 except KeyboardInterrupt:
-	loop.run_until_complete(bot.logout())
+	bot.loop.run_until_complete(bot.logout())
+	pending = asyncio.Task.all_tasks()
+	gathered = asyncio.gather(*pending)
+	try:
+		gathered.cancel()
+		bot.loop.run_forever()
+		gathered.exception()
+	except:
+		pass
 finally:
-	loop.close()
+	bot.loop.close()
