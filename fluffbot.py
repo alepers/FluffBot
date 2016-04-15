@@ -59,17 +59,6 @@ class Bot(discord.Client):
         	self.player = self.voice.create_ffmpeg_player(r'audio\brain_power_adj.mp3')
         	self.player.start()
 
-        elif message.content.startswith('!gustavpower'):
-        	if self.player is not None and self.player.is_playing():
-        		return
-
-        	if not self.is_voice_connected():
-                    await self.send_message(message.channel, 'Not connected to a voice channel.')
-                    return
-
-        	self.player = self.voice.create_ffmpeg_player(r'audio\gustav_power.mp3')
-        	self.player.start()
-
     async def on_ready(self):
         print('Logged in as')
         print(self.user.name)
@@ -84,4 +73,11 @@ with open(r'input\token.txt', 'r') as token:
 	password = token.readline().replace('\n', '')
 
 bot = Bot()
-bot.run(email, password)
+
+loop = asyncio.get_event_loop()
+try:
+	loop.run_until_complete(bot.start(email, password))
+except KeyboardInterrupt:
+	loop.run_until_complete(bot.logout())
+finally:
+	loop.close()
