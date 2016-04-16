@@ -79,6 +79,62 @@ class Bot(discord.Client):
         	self.player = self.voice.create_ffmpeg_player(r'audio\brain_power_adj.mp3')
         	self.player.start()
 
+        elif message.content.startswith('!mad'):
+        	if self.player is not None and self.player.is_playing():
+        		return
+
+        	if not self.is_voice_connected():
+                    await self.send_message(message.channel, 'Not connected to a voice channel.')
+                    return
+
+        	self.player = self.voice.create_ffmpeg_player(r'audio\why_you_heff.wav')
+        	self.player.start()
+
+        elif message.content.startswith('!sexy'):
+        	if self.player is not None and self.player.is_playing():
+        		return
+
+        	if not self.is_voice_connected():
+                    await self.send_message(message.channel, 'Not connected to a voice channel.')
+                    return
+
+        	self.player = self.voice.create_ffmpeg_player(r'audio\sexy_jazz.mp3')
+        	self.player.start()
+
+        elif message.content.startswith('!ruski'):
+        	if self.player is not None and self.player.is_playing():
+        		return
+
+        	if not self.is_voice_connected():
+                    await self.send_message(message.channel, 'Not connected to a voice channel.')
+                    return
+
+        	self.player = self.voice.create_ffmpeg_player(r'audio\ruski.mp3')
+        	self.player.start()
+
+        elif message.content.startswith('!drank'):
+        	if self.player is not None and self.player.is_playing():
+        		return
+
+        	if not self.is_voice_connected():
+                    await self.send_message(message.channel, 'Not connected to a voice channel.')
+                    return
+
+        	self.player = self.voice.create_ffmpeg_player(r'audio\one_mo_drank.mp3')
+        	self.player.start()
+
+        elif message.content.startswith('!hotlineming'):
+        	if self.player is not None and self.player.is_playing():
+        		return
+
+        	if not self.is_voice_connected():
+                    await self.send_message(message.channel, 'Not connected to a voice channel.')
+                    return
+
+        	self.player = self.voice.create_ffmpeg_player(r'audio\hotrine_ming.mp3')
+        	self.player.start()
+
+
     async def on_ready(self):
         print('Logged in as')
         print(self.user.name)
@@ -90,14 +146,18 @@ async def poll_twitch():
 	channel = discord.Object(id=discord.utils.find(lambda m: m.name == 'general', list(bot.servers)[0].channels).id)
 	while not bot.is_closed:
 		for user, online in bot.streams.items():
-			info = json.loads(urlopen('https://api.twitch.tv/kraken/streams/' + user).read().decode('utf-8'))
-			if info['stream'] == None:
-				if online:
-					bot.go_offline(user)
-			else:
-				if not online:
-					bot.go_live(user)
-					await bot.send_message(channel, user + ' just started streaming! https://www.twitch.tv/' + user)
+			try:
+				info = json.loads(urlopen('https://api.twitch.tv/kraken/streams/' + user).read().decode('utf-8'))
+				if info['stream'] == None:
+					if online:
+						bot.go_offline(user)
+				else:
+					if not online:
+						bot.go_live(user)
+						await bot.send_message(channel, user + ' just started streaming! https://www.twitch.tv/' + user)
+			except:
+				pass
+			
 		await asyncio.sleep(60)
 
 email, password = '', ''
