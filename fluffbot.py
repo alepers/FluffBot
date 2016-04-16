@@ -1,6 +1,7 @@
 import discord
 import asyncio
 import logging
+import ast
 
 from urllib.request import urlopen
 from urllib.error import URLError
@@ -42,7 +43,7 @@ class Bot(discord.Client):
         if message.channel.is_private:
             await self.send_message(message.channel, 'You cannot use this bot in private messages.')
 
-        elif message.content.startswith('!join'):
+        elif message.content.startswith('$join'):
             channel_name = message.content[5:].strip()
             check = lambda c: c.name == channel_name and c.type == discord.ChannelType.voice
             channel = discord.utils.find(check, message.server.channels)
@@ -53,87 +54,27 @@ class Bot(discord.Client):
                 	await self.voice.disconnect()
                 await self.join_voice_channel(channel)
 
-        elif message.content.startswith('!leave'):
+        elif message.content.startswith('$leave'):
             if self.is_voice_connected():
             	await self.voice.disconnect()
 
-        elif message.content.startswith('!tadetlugnt'):
+        elif message.content.startswith('!'):
         	if self.player is not None and self.player.is_playing():
         		return
 
         	if not self.is_voice_connected():
-                    await self.send_message(message.channel, 'Not connected to a voice channel.')
-                    return
-
-        	self.player = self.voice.create_ffmpeg_player(r'audio\ta_det_lugnt.mp3')
-        	self.player.start()
-
-        elif message.content.startswith('!brainpower'):
-        	if self.player is not None and self.player.is_playing():
+        		await self.send_message(message.channel, 'Not connected to a voice channel.')
         		return
 
-        	if not self.is_voice_connected():
-                    await self.send_message(message.channel, 'Not connected to a voice channel.')
-                    return
-
-        	self.player = self.voice.create_ffmpeg_player(r'audio\brain_power_adj.mp3')
-        	self.player.start()
-
-        elif message.content.startswith('!mad'):
-        	if self.player is not None and self.player.is_playing():
-        		return
-
-        	if not self.is_voice_connected():
-                    await self.send_message(message.channel, 'Not connected to a voice channel.')
-                    return
-
-        	self.player = self.voice.create_ffmpeg_player(r'audio\why_you_heff.wav')
-        	self.player.start()
-
-        elif message.content.startswith('!sexy'):
-        	if self.player is not None and self.player.is_playing():
-        		return
-
-        	if not self.is_voice_connected():
-                    await self.send_message(message.channel, 'Not connected to a voice channel.')
-                    return
-
-        	self.player = self.voice.create_ffmpeg_player(r'audio\sexy_jazz.mp3')
-        	self.player.start()
-
-        elif message.content.startswith('!ruski'):
-        	if self.player is not None and self.player.is_playing():
-        		return
-
-        	if not self.is_voice_connected():
-                    await self.send_message(message.channel, 'Not connected to a voice channel.')
-                    return
-
-        	self.player = self.voice.create_ffmpeg_player(r'audio\ruski.mp3')
-        	self.player.start()
-
-        elif message.content.startswith('!drank'):
-        	if self.player is not None and self.player.is_playing():
-        		return
-
-        	if not self.is_voice_connected():
-                    await self.send_message(message.channel, 'Not connected to a voice channel.')
-                    return
-
-        	self.player = self.voice.create_ffmpeg_player(r'audio\one_mo_drank.mp3')
-        	self.player.start()
-
-        elif message.content.startswith('!hotlineming'):
-        	if self.player is not None and self.player.is_playing():
-        		return
-
-        	if not self.is_voice_connected():
-                    await self.send_message(message.channel, 'Not connected to a voice channel.')
-                    return
-
-        	self.player = self.voice.create_ffmpeg_player(r'audio\hotrine_ming.mp3')
-        	self.player.start()
-
+        	command = message.content[1:len(message.content)]
+        	with open(r'input\audio.txt', 'r') as audio_handle:
+        		s = audio_handle.read()
+        		dic = ast.literal_eval(s)
+        		if command in dic:
+        			self.player = self.voice.create_ffmpeg_player('audio\\' + dic[command])
+        			self.player.start()
+        		else:
+        			await self.send_message(message.channel, 'No such command.')
 
     async def on_ready(self):
         print('Logged in as')
