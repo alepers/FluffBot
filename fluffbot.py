@@ -125,7 +125,8 @@ async def auto_join():
             len(list(filter(lambda vc: len(vc.voice_members) 
             == len(candidate.voice_members), voice_channels))) > 0):
         await bot.join_voice_channel(candidate)
-    asyncio.sleep(10)
+    
+    await asyncio.sleep(10)
 
 login_token = ''
 
