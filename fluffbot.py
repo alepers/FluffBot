@@ -127,14 +127,15 @@ async def poll_twitch():
 async def auto_join():
     await asyncio.sleep(10)
     while not bot.is_closed:
-        voice_channels = list(filter(lambda c: c.type == discord.ChannelType.voice and c != bot.get_server().afk_channel, bot.get_server().channels))
-        voice_channels.sort(key=lambda vc: len(vc.voice_members) - 1 if bot.user in vc.voice_members else len(vc.voice_members))
+        voice_channels = list(filter(lambda c: c.type == discord.ChannelType.voice and
+            c != bot.get_server().afk_channel and not
+            bot.user in c.voice_members, bot.get_server().channels))
+        voice_channels.sort(key=lambda vc: len(vc.voice_members))
         candidate = voice_channels.pop()
         if not bot.is_voice_connected(bot.get_server()): 
             await bot.join_voice_channel(candidate)
         else:
-            if not len(list(filter(lambda vc: len(vc.voice_members) 
-                    == len(candidate.voice_members), voice_channels))) > 0:
+            if len(bot.voice_client_in(bot.get_server()).channel.voice_members) - 1 < len(candidate.voice_members):
                 await bot.voice_client_in(bot.get_server()).move_to(candidate)
         
         await asyncio.sleep(10)
