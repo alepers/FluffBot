@@ -37,13 +37,6 @@ class Bot(discord.Client):
     def go_offline(self, user):
         self.streams[user] = False
 
-    def get_server(self):
-        if self.server is not None:
-            return self.server
-        else:
-            print("Server is null!")
-            return None
-
     async def on_message(self, message):
         if message.author == self.user:
             return
@@ -107,7 +100,7 @@ class Bot(discord.Client):
 
 async def poll_twitch():
     await asyncio.sleep(10)
-    channel = discord.Object(id=discord.utils.find(lambda m: m.name == 'general', bot.get_server().channels).id)
+    channel = discord.Object(id=discord.utils.find(lambda m: m.name == 'general', bot.server.channels).id)
     while not bot.is_closed:
         for user, online in bot.streams.items():
             try:
@@ -128,15 +121,15 @@ async def auto_join():
     await asyncio.sleep(10)
     while not bot.is_closed:
         voice_channels = list(filter(lambda c: c.type == discord.ChannelType.voice and
-            c != bot.get_server().afk_channel and not
-            bot.user in c.voice_members, bot.get_server().channels))
+            c != bot.server.afk_channel and not
+            bot.user in c.voice_members, bot.server.channels))
         voice_channels.sort(key=lambda vc: len(vc.voice_members))
         candidate = voice_channels.pop()
-        if not bot.is_voice_connected(bot.get_server()): 
+        if not bot.is_voice_connected(bot.server): 
             await bot.join_voice_channel(candidate)
         else:
-            if len(bot.voice_client_in(bot.get_server()).channel.voice_members) - 1 < len(candidate.voice_members):
-                await bot.voice_client_in(bot.get_server()).move_to(candidate)
+            if len(bot.voice_client_in(bot.server).channel.voice_members) - 1 < len(candidate.voice_members):
+                await bot.voice_client_in(bot.server).move_to(candidate)
         
         await asyncio.sleep(10)
 
