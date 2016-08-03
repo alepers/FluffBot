@@ -99,7 +99,7 @@ class Bot(discord.Client):
         print('------')
 
 async def poll_twitch():
-    await asyncio.sleep(10)
+    await asyncio.sleep(20)
     channel = discord.Object(id=discord.utils.find(lambda m: m.name == 'general', bot.server.channels).id)
     while not bot.is_closed:
         for user, online in bot.streams.items():
@@ -118,7 +118,7 @@ async def poll_twitch():
         await asyncio.sleep(60)
 
 async def auto_join():
-    await asyncio.sleep(10)
+    await asyncio.sleep(20)
     while not bot.is_closed:
         voice_channels = list(filter(lambda c: c.type == discord.ChannelType.voice and
             c != bot.server.afk_channel and not
