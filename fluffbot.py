@@ -11,7 +11,9 @@ import json
 logging.basicConfig(level=logging.INFO)
 
 if not discord.opus.is_loaded():
-    discord.opus.load_opus(os.path.realpath(__file__) + r'\lib\opus\libopus-0.x64.dll')
+    script_path = os.path.dirname(os.path.abspath(__file__))
+    opus_path = os.path.join(script_path, 'lib', 'opus', 'libopus-0.x64.dll')
+    discord.opus.load_opus(opus_path)
 
 class Bot(discord.Client):
     def init_streams(self):
