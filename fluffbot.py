@@ -2,6 +2,7 @@ import discord
 import asyncio
 import logging
 import ast
+import os
 
 from urllib.request import urlopen
 from urllib.error import URLError
@@ -10,7 +11,7 @@ import json
 logging.basicConfig(level=logging.INFO)
 
 if not discord.opus.is_loaded():
-    discord.opus.load_opus(r"C:\Users\Alexander\FluffBot\lib\opus\libopus-0.x64.dll")
+    discord.opus.load_opus(os.path.realpath(__file__) + r'\lib\opus\libopus-0.x64.dll')
 
 class Bot(discord.Client):
     def init_streams(self):
