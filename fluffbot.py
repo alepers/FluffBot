@@ -103,7 +103,7 @@ class Bot(discord.Client):
 
 async def poll_twitch():
     await asyncio.sleep(20)
-    channel = discord.Object(id=discord.utils.find(lambda m: m.name == 'general', bot.server.channels).id)
+    channel = discord.utils.find(lambda c: c.is_default, bot.server.channels)
     while not bot.is_closed:
         for user, online in bot.streams.items():
             try:
