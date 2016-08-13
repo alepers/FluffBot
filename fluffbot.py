@@ -95,11 +95,16 @@ class Bot(discord.Client):
                 await self.send_message(message.channel, help_string)
 
     async def on_ready(self):
-        self.server = list(self.servers)[0]
         print('Logged in as')
         print(self.user.name)
         print(self.user.id)
         print('------')
+
+        # store server for convenience
+        self.server = list(self.servers)[0]
+
+        channel = discord.utils.find(lambda c: c.is_default, self.server.channels)
+        await self.send_message(channel, 'Bleep bloop, I am a robot.')
 
 async def poll_twitch():
     await asyncio.sleep(20)
