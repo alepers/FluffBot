@@ -4,8 +4,7 @@ import logging
 import ast
 import os
 
-from urllib.request import urlopen
-from urllib.error import URLError
+import aiohttp
 import json
 
 logging.basicConfig(level=logging.INFO)
@@ -112,7 +111,14 @@ async def poll_twitch():
     while not bot.is_closed:
         for user, online in bot.streams.items():
             try:
-                info = json.loads(urlopen('https://api.twitch.tv/kraken/streams/' + user).read().decode('utf-8'))
+                url = 'https://api.twitch.tv/kraken/streams/' + user
+                headers = {'Client-Id': twitch_client_id}
+                info = ''
+                
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(url, headers=headers) as response:
+                        info = await response.json()
+
                 if info['stream'] == None:
                     if online:
                         bot.go_offline(user)
@@ -142,9 +148,11 @@ async def auto_join():
         await asyncio.sleep(10)
 
 login_token = ''
+twitch_client_id = ''
 
 with open(r'input\token.txt', 'r') as token:
     login_token = token.readline().replace('\n', '')
+    twitch_client_id = token.readline().replace('\n', '')
 
 bot = Bot()
 try:
