@@ -13,6 +13,8 @@ class Cog:
     @commands.command(pass_context=True, hidden=True)
     @checks.is_owner()
     async def debug(self, ctx, *, code : str):
+        """Lets the bot owner evaluate arbitrary code."""
+
         code = code.strip('` ')
         python = '```py\n{}\n```'
         result = None
@@ -40,6 +42,8 @@ class Cog:
 
     @commands.command(pass_context=True)
     async def roll(self, ctx):
+        """Rolls for a number between 0-100."""
+
         minimum = 0
         maximum = 100
 
@@ -47,6 +51,8 @@ class Cog:
 
     @commands.command(pass_context=True)
     async def play(self, ctx, *, audio : str):
+        """Plays a specified sound clip. Use 'play help' to see a list of clips."""
+
         if not hasattr(self.bot, 'player'):
             self.bot.player = None
 
