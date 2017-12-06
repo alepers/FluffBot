@@ -77,6 +77,9 @@ class Cog:
             if audio in dic:
                 self.bot.player = self.bot.voice_client_in(ctx.message.server).create_ffmpeg_player('audio\\' + dic[audio])
                 self.bot.player.start()
+
+                # Clean up play command message
+                await self.bot.delete_message(ctx.message)
             else:
                 await self.bot.say('No such audio clip. Type `!play help` for a list of clips.')
 
