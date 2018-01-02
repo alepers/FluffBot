@@ -41,6 +41,15 @@ class Cog:
         await self.bot.say(python.format(result))
 
     @commands.command(pass_context=True)
+    async def disconnect(self, ctx):
+        """Disconnects the bot from the current voice channel."""
+
+        if self.bot.is_voice_connected(ctx.message.server):
+            await self.bot.voice_client_in(ctx.message.server).disconnect()
+        else:
+            await self.bot.say('Not connected to a voice channel.')
+
+    @commands.command(pass_context=True)
     async def roll(self, ctx):
         """Rolls for a number between 0-100."""
 
