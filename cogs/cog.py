@@ -80,7 +80,7 @@ class Cog:
             s = audio_handle.read()
             dic = ast.literal_eval(s)
             if audio == 'help':
-                await self.bot.say('Audio clips: `' + ', '.join(dic.keys()) + '`')
+                await self.bot.say('Audio clips: `' + ', '.join(sorted(dic.keys())) + '`')
                 return
 
             if audio in dic:
