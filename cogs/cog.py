@@ -5,6 +5,7 @@ import inspect
 import datetime
 import random
 import ast
+import os
 
 class Cog:
     def __init__(self, bot):
@@ -76,7 +77,7 @@ class Cog:
             await self.bot.say('You need to be in this voice channel to play audio.')
             return
 
-        with open(r'input\audio.txt', 'r') as audio_handle:
+        with open(os.path.join('input', 'audio.txt'), 'r') as audio_handle:
             s = audio_handle.read()
             dic = ast.literal_eval(s)
             if audio == 'help':
@@ -84,7 +85,7 @@ class Cog:
                 return
 
             if audio in dic:
-                self.bot.player = self.bot.voice_client_in(ctx.message.server).create_ffmpeg_player('audio\\' + dic[audio])
+                self.bot.player = self.bot.voice_client_in(ctx.message.server).create_ffmpeg_player(os.path.join('audio', dic[audio]))
                 self.bot.player.start()
 
                 # Clean up play command message

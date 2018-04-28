@@ -51,7 +51,7 @@ def load_credentials():
         return json.load(f)
 
 def init_streams():
-    with open(r'input\streams.txt', 'r') as file:
+    with open(os.path.join('input', 'streams.txt'), 'r') as file:
         stream_names = file.readlines()
         stream_names = [x.strip('\n') for x in stream_names]
         stream_statuses = []
@@ -91,7 +91,7 @@ async def poll_twitch():
         await asyncio.sleep(60)
 
 async def auto_join():
-    await asyncio.sleep(20)
+    await asyncio.sleep(15)
     while not bot.is_closed:
         for server in bot.servers:
             voice_channels = list(filter(lambda c: c.type == discord.ChannelType.voice and
