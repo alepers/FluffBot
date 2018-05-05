@@ -107,7 +107,7 @@ async def auto_join():
 
         await asyncio.sleep(10)
 
-if __name__ == '__main__':
+def main():
     credentials = load_credentials()
     twitch_client_id = credentials['twitch_client_id']
 
@@ -133,3 +133,6 @@ if __name__ == '__main__':
             pass
     finally:
         bot.loop.close()
+
+if __name__ == '__main__':
+    main()
