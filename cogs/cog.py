@@ -1,6 +1,7 @@
 from discord.ext import commands
 from .utils import checks
 import discord
+import asyncio
 import inspect
 import datetime
 import random
@@ -89,6 +90,7 @@ class Cog:
                 self.bot.player.start()
 
                 # Clean up play command message
+                await asyncio.sleep(2)
                 await self.bot.delete_message(ctx.message)
             else:
                 await self.bot.say('No such audio clip. Type `!play help` for a list of clips.')
