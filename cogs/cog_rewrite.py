@@ -1,5 +1,5 @@
 from discord.ext import commands
-from .utils import checks
+from .utils import checks_rewrite
 import discord
 import asyncio
 import inspect
@@ -16,7 +16,7 @@ class BotCommands:
 
 
     @commands.command(hidden=True)
-    @checks.is_owner()
+    @checks_rewrite.is_owner()
     async def debug(self, ctx, *, code : str):
         """Lets the bot owner evaluate arbitrary code."""
 
@@ -28,7 +28,7 @@ class BotCommands:
             'bot': self.bot,
             'ctx': ctx,
             'message': ctx.message,
-            'server': ctx.message.server,
+            'guild': ctx.message.guild,
             'channel': ctx.message.channel,
             'author': ctx.message.author
         }
