@@ -96,7 +96,7 @@ class BotCommands:
     async def source(self, ctx):
         """Displays a link to the FluffBot source code on GitHub."""
 
-        await ctx.send('https://github.com/alepers/FluffBot')
+        await ctx.send('FluffBot source code: https://github.com/alepers/FluffBot')
 
 
 def setup(bot):
