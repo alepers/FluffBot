@@ -6,6 +6,8 @@ import json
 import os
 import aiohttp
 import asyncio
+import sys
+import traceback
 
 description = """
 A Discord bot written by alepers.
@@ -45,6 +47,29 @@ async def on_message(message):
         return
 
     await bot.process_commands(message)
+
+
+@bot.event
+async def on_command_error(ctx, exception):
+    if hasattr(ctx.command, 'on_error'):
+        return
+
+    cog = ctx.cog
+    if cog:
+        attr = '_{0.__class__.__name__}__error'.format(cog)
+        if hasattr(cog, attr):
+            return
+
+    if isinstance(exception, commands.CommandOnCooldown):
+        await ctx.message.add_reaction('\N{STOPWATCH}')
+        return
+
+    if isinstance(exception, commands.CheckFailure):
+        await ctx.message.add_reaction('\N{CROSS MARK}')
+        return
+
+    print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+    traceback.print_exception(type(exception), exception, exception.__traceback__, file=sys.stderr)
 
 
 def load_credentials():
