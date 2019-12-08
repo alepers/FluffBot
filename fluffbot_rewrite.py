@@ -16,7 +16,10 @@ extensions = [
     'cogs.cog_rewrite'
 ]
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 if not discord.opus.is_loaded():
     script_path = os.path.dirname(os.path.abspath(__file__))
