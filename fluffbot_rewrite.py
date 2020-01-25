@@ -8,6 +8,7 @@ import aiohttp
 import asyncio
 import sys
 import traceback
+import ctypes
 
 description = """
 A Discord bot written by alepers.
@@ -21,10 +22,14 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
 
-if not discord.opus.is_loaded():
-    script_path = os.path.dirname(os.path.abspath(__file__))
-    opus_path = os.path.join(script_path, 'lib', 'opus', 'libopus-0.x64.dll')
-    discord.opus.load_opus(opus_path)
+
+def get_opus_lib(name='opus'):
+    return ctypes.util.find_library(name)
+
+
+opus_lib = get_opus_lib();
+if opus_lib:
+    discord.opus.load_opus(opus_lib)
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!', '?'), 
                    description=description,
@@ -157,7 +162,7 @@ def main():
 
     try:
         bot.loop.create_task(auto_join())
-        bot.loop.create_task(poll_twitch())
+        #bot.loop.create_task(poll_twitch())
         bot.loop.run_until_complete(bot.start(credentials['token']))
     except KeyboardInterrupt:
         bot.loop.run_until_complete(bot.logout())
